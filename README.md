@@ -1,7 +1,7 @@
 # ADSearch
 A tool written in C# to help query AD more effectively.
 
-# Usage
+## Usage
 ```
 -d, --domain       The domain to read information from. If blank we will attempt to determine the current domain the computer is joined to.
 
@@ -19,3 +19,7 @@ Example Usage:
 
 ADSearch -d ldap.example.net --groups --computers --spns
 ```
+
+## Screenshots
+![alt text](https://github.com/tomcarver16/ADSearch/blob/master/Images/all-groups.png "All Groups")
+![alt text](https://github.com/tomcarver16/ADSearch/blob/master/Images/all-users.png "All Users")
