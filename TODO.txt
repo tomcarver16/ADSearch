@@ -1,2 +1,1 @@
-1) Add output options to save file in JSON format
-2) Do DNS resolve on remote AD server to be more reliable
+1) Do DNS resolve on remote AD server to be more reliable
