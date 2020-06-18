@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
+using System.DirectoryServices.ActiveDirectory;
 using System.Text;
 
 namespace ADSearch {
@@ -8,6 +9,7 @@ namespace ADSearch {
         private string m_domain;
         private string m_ldapString;
         private DirectoryEntry m_directoryEntry;
+        private const string PROTOCOL_PREFIX = "LDAP://";
 
         //Default constructor attempts to detrmine domain from current machine
         public ADWrapper() {
@@ -17,24 +19,22 @@ namespace ADSearch {
 
         //Bind to FQDN with authentication if creds set else attempt anon bind
         public ADWrapper(string domain, string username, string password) {
+            this.m_domain = domain;
+            this.m_ldapString = GetDomainPathFromURI(this.m_domain);
             if (username != null && password != null) {
-                this.m_domain = domain;
-                this.m_ldapString = GetDomainPathFromURI(this.m_domain);
                 this.m_directoryEntry = new DirectoryEntry(m_ldapString, username, password);
             } else {
-                this.m_domain = domain;
-                this.m_ldapString = GetDomainPathFromURI(this.m_domain);
                 this.m_directoryEntry = new DirectoryEntry(this.m_ldapString);
             }
         }
 
         //Bind to remote server with authentication if creds set else attempt anon bind
         public ADWrapper(string domain, string ip, string port, string username, string password) {
+            this.m_domain = domain;
+            this.m_ldapString = GetDomainPathFromIP(this.m_domain, ip, port);
             if (username != null && password != null) {
-                this.m_ldapString = GetDomainPathFromIP(this.m_domain, ip, port);
                 this.m_directoryEntry = new DirectoryEntry(m_ldapString, username, password);
             } else {
-                this.m_ldapString = GetDomainPathFromIP(this.m_domain, ip, port);
                 this.m_directoryEntry = new DirectoryEntry(m_ldapString);
             }
         }
@@ -43,19 +43,20 @@ namespace ADSearch {
             get { return m_ldapString; }
         } 
 
-        private static string GetDomainPathFromURI(string domainURI) {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("LDAP://");
-            foreach (string entry in domainURI.Split('.')) {
-                sb.Append("DC=" + entry + ",");
-            }
-            return sb.ToString().TrimEnd(',');
+        private string GetDomainPathFromURI(string domainURI) {
+            return String.Format("{0}{1}", PROTOCOL_PREFIX, GetDCListFromURI(domainURI));
         }
 
         private static string GetDomainPathFromIP(string domainURI, string ip, string port) {
+            return String.Format("{0}{1}:{2}/{3}", PROTOCOL_PREFIX, ip, port, GetDCListFromURI(domainURI));
+        }
+
+        private static string GetDCListFromURI(string uri) {
             StringBuilder sb = new StringBuilder();
-            sb.Append(String.Format("LDAP://{0}:{1}/DC=acme,DC=local", ip, port));
-            return sb.ToString();
+            foreach (string entry in uri.Split('.')) {
+                sb.Append("DC=" + entry + ",");
+            }
+            return sb.ToString().TrimEnd(',');
         }
 
         public string GetCurrentDomainPath() {
