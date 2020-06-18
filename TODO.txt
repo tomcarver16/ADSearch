@@ -1,1 +1,2 @@
 1) Do DNS resolve on remote AD server to be more reliable
+2) Add cutoff for data i.e. first 20 results.
