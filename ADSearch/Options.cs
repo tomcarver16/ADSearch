@@ -30,7 +30,7 @@ namespace ADSearch {
         [Option('f', "full", HelpText = "If set will show all attributes for the returned item.")]
         bool Full { get; set; }
 
-        [Option('o', "output", Default = "outfile", HelpText = "File path to output the results to.")]
+        [Option('o', "output", HelpText = "File path to output the results to.")]
         string Output { get; set; }
 
         [Option("json", Default = false, HelpText = "Output results in json format.")]
