@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using CommandLine;
 
 namespace ADSearch {
@@ -27,6 +28,8 @@ namespace ADSearch {
                 OutputFormatting.PrintVerbose("No domain supplied. This PC's domain will be used instead");
                 AD = new ADWrapper();
             }
+
+            OutputFormatting.PrintVerbose(AD.LDAP_URI);
 
             if (options.Groups) {
                 OutputFormatting.PrintVerbose("ALL GROUPS: ");

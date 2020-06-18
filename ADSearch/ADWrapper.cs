@@ -39,6 +39,10 @@ namespace ADSearch {
             }
         }
 
+        public string LDAP_URI {
+            get { return m_ldapString; }
+        } 
+
         private static string GetDomainPathFromURI(string domainURI) {
             StringBuilder sb = new StringBuilder();
             sb.Append("LDAP://");
