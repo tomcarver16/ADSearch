@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADWrapper.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="OutputFormatting.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

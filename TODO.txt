@@ -1,2 +1,1 @@
 1) Add output options to save file in JSON format
-2) Remote bind to AD with some form of token or creds

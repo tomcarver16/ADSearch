@@ -4,28 +4,6 @@ using CommandLine;
 namespace ADSearch {
 
     class Program {
-        class Options {
-            [Option('d', "domain", HelpText = "The domain to read information from. If blank we will attempt to determine the current domain the computer is joined to.")]
-            public string Domain { get; set; }
-
-            [Option('G', "groups", HelpText = "Enumerate and return all groups from AD")]
-            public bool Groups { get; set; }
-
-            [Option('U', "users", HelpText = "Enumerate and return all users from AD")]
-            public bool Users { get; set; }
-
-            [Option('C', "computers", HelpText = "Enumerate and return all computers joined to the AD")]
-            public bool Computers { get; set; }
-
-            [Option('S', "spns", HelpText = "Enumerate and return all SPNS from AD")]
-            public bool Spns { get; set; }
-
-            [Option('s', "search", HelpText = "Perform a custom search on the AD server")]
-            public string Search { get; set; }
-
-            [Option('f', "full", HelpText = "If set will show all attributes for the returned item")]
-            public bool Full { get; set; }
-        }
 
         static void Main(string[] args) {
             var cmdOptions = Parser.Default.ParseArguments<Options>(args);
@@ -37,13 +15,18 @@ namespace ADSearch {
 
         static void Entry(Options options) {
             ADWrapper AD;
-            if (options.Domain == null) {
-                AD = new ADWrapper();
+            
+            if (options.IP == null && options.Domain != null) {
+                //No IP but domains set
+                AD = new ADWrapper(options.Domain, options.Username, options.Password);
+            } else if (options.IP != null && options.Domain != null) {
+                //This requires the domain so it can be converted into a valid LDAP URI
+                AD = new ADWrapper(options.Domain, options.IP, options.Port, options.Username, options.Password);
             } else {
-                AD = new ADWrapper(options.Domain);
+                //When no domain is supplied it has to be done locally even if the ip is set otherwise the bind won't work
+                OutputFormatting.PrintVerbose("No domain supplied. This PC's domain will be used instead");
+                AD = new ADWrapper();
             }
-
-            OutputFormatting.PrintVerbose(AD.GetCurrentDomainPath());
 
             if (options.Groups) {
                 OutputFormatting.PrintVerbose("ALL GROUPS: ");
