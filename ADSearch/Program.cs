@@ -1,4 +1,5 @@
 using System;
+using System.DirectoryServices;
 using System.Runtime.InteropServices;
 using CommandLine;
 
@@ -64,32 +65,32 @@ GitHub: @tomcarver16
 
             if (options.Groups) {
                 OutputFormatting.PrintVerbose("ALL GROUPS: ");
-                AD.ListAllGroups(options.Full);
+                AD.ListAllGroups(AD.GetAllGroups(), options.Full);
             }
             
             if (options.Users) {
                 OutputFormatting.PrintVerbose("ALL USERS: ");
-                AD.ListAllUsers(options.Full);
+                AD.ListAllUsers(AD.GetAllUsers(), options.Full);
             }
 
             if (options.Computers) {
                 OutputFormatting.PrintVerbose("ALL COMPUTERS: ");
-                AD.ListAllComputers(options.Full);
+                AD.ListAllComputers(AD.GetAllComputers(), options.Full);
             }
 
             if (options.Search != null) {
                 OutputFormatting.PrintVerbose("CUSTOM SEARCH: ");
-                AD.ListCustomSearch(options.Search, options.Full);
+                AD.ListCustomSearch(AD.GetCustomSearch(options.Search), options.Full);
             }
 
             if (options.Spns) {
                 OutputFormatting.PrintVerbose("ALL SPNS: ");
-                AD.ListAllSpns(options.Full);
+                AD.ListAllSpns(AD.GetAllSpns(), options.Full);
             }
 
             if (options.DomainAdmins) {
                 OutputFormatting.PrintVerbose("ALL DOMAIN ADMINS: ");
-                AD.ListAllDomainAdmins(options.Full);
+                AD.ListAllDomainAdmins(AD.GetAllDomainAdmins(), options.Full);
             }
 
             if (options.Output != null) {

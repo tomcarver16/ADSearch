@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
-using System.Xml.Schema;
 
 namespace ADSearch {
     class ADWrapper {
@@ -90,13 +88,65 @@ namespace ADSearch {
             return "LDAP://" + de.Properties["defaultNamingContext"][0].ToString();
         }
 
-        public void ListAllSpns(bool full = false) {
+        #region Get Functions
+        public SearchResultCollection GetAllUsers() {
+            SearchResultCollection results = this.CustomSearch("(&(objectClass=user)(objectCategory=person))");
+            if (results == null) {
+                OutputFormatting.PrintError("Unable to obtain any users");
+                throw new Exception("Custom search came back null");
+            }
+            return results;
+        }
+
+        public SearchResultCollection GetAllComputers() {
+            SearchResultCollection results = this.CustomSearch("(objectCategory=computer)");
+            if (results == null) {
+                OutputFormatting.PrintError("Unable to obtain any computers");
+                throw new Exception("Custom search came back null");
+            }
+            return results;
+        }
+
+        public SearchResultCollection GetAllGroups() {
+            SearchResultCollection results = this.CustomSearch("(objectCategory=group)");
+            if (results == null) {
+                OutputFormatting.PrintError("Unable to obtain any groups");
+                throw new Exception("Custom search came back null");
+            }
+            return results;
+        }
+
+        public SearchResultCollection GetAllSpns() {
             SearchResultCollection results = this.CustomSearch("(servicePrincipalName=*)");
             if (results == null) {
                 OutputFormatting.PrintError("Unable to obtain any Service Principal Names");
-                return;
+                throw new Exception("Custom search came back null");
             }
+            return results;
+        }
 
+        public SearchResultCollection GetAllDomainAdmins() {
+            string filter = String.Format("(&(objectCategory=user)(memberOf=CN=Domain Admins,CN=Users,{0}))", this.m_domainPath);
+            SearchResultCollection results = this.CustomSearch(filter);
+            if (results == null) {
+                OutputFormatting.PrintError("Unable to get domain admins");
+                throw new Exception("Custom search came back null");
+            }
+            return results;
+        }
+
+        public SearchResultCollection GetCustomSearch(string query) {
+            SearchResultCollection results = this.CustomSearch(query);
+            if (results == null) {
+                OutputFormatting.PrintError("Unable to carry out custom search");
+                throw new Exception("Custom search came back null");
+            }
+            return results;
+        }
+        #endregion
+
+        #region List Functions
+        public void ListAllSpns(SearchResultCollection results, bool full = false) {
             if (full) {
                 ListAll(results);
             } else {
@@ -104,13 +154,7 @@ namespace ADSearch {
             }
         }
 
-        public void ListAllGroups(bool full = false) {
-            SearchResultCollection results = this.CustomSearch("(objectCategory=group)");
-            if (results == null) {
-                OutputFormatting.PrintError("Unable to obtain any groups");
-                return;
-            }
-
+        public void ListAllGroups(SearchResultCollection results, bool full = false) {
             if (full) {
                 ListAll(results);
             } else {
@@ -119,13 +163,7 @@ namespace ADSearch {
             
         }
 
-        public void ListAllUsers(bool full = false) {
-            SearchResultCollection results = this.CustomSearch("(&(objectClass=user)(objectCategory=person))");
-            if (results == null) {
-                OutputFormatting.PrintError("Unable to obtain any users");
-                return;
-            }
-
+        public void ListAllUsers(SearchResultCollection results, bool full = false) {
             if (full) {
                 ListAll(results);
             } else {
@@ -133,13 +171,7 @@ namespace ADSearch {
             }
         }
 
-        public void ListAllComputers(bool full = false) {
-            SearchResultCollection results = this.CustomSearch("(objectCategory=computer)");
-            if (results == null) {
-                OutputFormatting.PrintError("Unable to obtain any computers");
-                return;
-            }
-
+        public void ListAllComputers(SearchResultCollection results, bool full = false) {
             if (full) {
                 ListAll(results);
             } else {
@@ -147,14 +179,7 @@ namespace ADSearch {
             }
         }
 
-        public void ListAllDomainAdmins(bool full = false) {
-            string filter = String.Format("(&(objectCategory=user)(memberOf=CN=Domain Admins,CN=Users,{0}))", this.m_domainPath);
-            SearchResultCollection results = this.CustomSearch(filter);
-            if (results == null) {
-                OutputFormatting.PrintError("Unable to get domain admins");
-                return;
-            }
-
+        public void ListAllDomainAdmins(SearchResultCollection results, bool full = false) { 
             if (full) {
                 ListAll(results);
             } else {
@@ -162,13 +187,7 @@ namespace ADSearch {
             }
         }
 
-        public void ListCustomSearch(string query, bool full = false) {
-            SearchResultCollection results = this.CustomSearch(query);
-            if (results == null) {
-                OutputFormatting.PrintError("Unable to carry out custom search");
-                return;
-            }
-
+        public void ListCustomSearch(SearchResultCollection results, bool full = false) {
             if (full) {
                 ListAll(results);
             } else {
@@ -208,6 +227,7 @@ namespace ADSearch {
                 OutputFormatting.PrintJson(attributedResults);
             }
         }
+        #endregion
 
         private SearchResultCollection CustomSearch(string query) {
             SearchResultCollection results = null;
