@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace ADSearch {
     class OutputFormatting {
+
         enum OUTPUT_TYPE { 
             SUCCESS = '+',
             VERBOSE = '*',

@@ -11,6 +11,8 @@ Query Active Directory remotely or locally:
 
   -f, --full          If set will show all attributes for the returned item.
 
+  -o, --output        File path to output the results to.
+
   --supress-banner    When set banner will be disabled.
 
   -G, --groups        Enumerate and return all groups from AD.
@@ -27,11 +29,13 @@ Query Active Directory remotely or locally:
 
   -p, --password      Attempts to authenticate to AD with the given password.
 
-  -i, --ip            If set will attempt a remote bind to the ip address. This option requires the domain option to be set to a valid DC on the IP address
+  -h, --hostname      If set will attempt a remote bind to the hostname. This option requires the domain option to be set to a valid DC on the hostname. Will allow an IP address to be used as well.
 
-  -p, --port          (Default: 389) If set will attempt a remote bind to the port based on the IP.
+  -p, --port          (Default: 636) If set will attempt a remote bind to the port based on the IP.
 
   -d, --domain        The domain controller we are connecting to in the FQDN format. If left blank then all other connection options are ignored and the lookups are done locally.
+
+  --insecure          (Default: false) If set will communicate over port 389 and not use SSL
 
   --help              Display this help screen.
 

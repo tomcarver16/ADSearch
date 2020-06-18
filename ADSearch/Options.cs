@@ -30,6 +30,9 @@ namespace ADSearch {
         [Option('f', "full", HelpText = "If set will show all attributes for the returned item.")]
         bool Full { get; set; }
 
+        [Option('o', "output", HelpText = "File path to output the results to.")]
+        string Output { get; set; }
+
         [Option("supress-banner", HelpText = "When set banner will be disabled.")]
         bool SupressBanner { get; set; }
     }
@@ -79,6 +82,8 @@ namespace ADSearch {
         public bool SupressBanner { get; set; }
 
         public bool Insecure { get; set; }
+
+        public string Output { get; set; }
 
         [Usage(ApplicationAlias = "ADSearch")]
         public static IEnumerable<Example> Examples {

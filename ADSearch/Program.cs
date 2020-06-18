@@ -29,9 +29,15 @@ GitHub: @tomcarver16
 
         static void Entry(Options options) {
             ADWrapper AD;
+            ConsoleFileOutput cf = null;
 
             if (!options.SupressBanner) {
                 PrintBanner();
+            }
+
+            if (options.Output != null) {
+                cf = new ConsoleFileOutput(options.Output, Console.Out);
+                Console.SetOut(cf);
             }
 
             if (options.Insecure) {
@@ -75,6 +81,11 @@ GitHub: @tomcarver16
             if (options.Spns) {
                 OutputFormatting.PrintVerbose("ALL SPNS: ");
                 AD.ListAllSpns();
+            }
+
+            if (options.Output != null) {
+                //Close out file handle
+                cf.Close();
             }
         }
 
