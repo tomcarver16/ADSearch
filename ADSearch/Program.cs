@@ -84,7 +84,12 @@ GitHub: @tomcarver16
 
             if (options.Spns) {
                 OutputFormatting.PrintVerbose("ALL SPNS: ");
-                AD.ListAllSpns();
+                AD.ListAllSpns(options.Full);
+            }
+
+            if (options.DomainAdmins) {
+                OutputFormatting.PrintVerbose("ALL DOMAIN ADMINS: ");
+                AD.ListAllDomainAdmins(options.Full);
             }
 
             if (options.Output != null) {

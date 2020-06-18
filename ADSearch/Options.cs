@@ -58,6 +58,9 @@ namespace ADSearch {
 
         [Option('s', "search", HelpText = "Perform a custom search on the AD server.")]
         string Search { get; set; }
+
+        [Option("domain-admins", HelpText = "Attempt to retreive all Domain Admin accounts.")]
+        bool DomainAdmins { get; set; }
     }
 
     class Options : IOutputOptions, IQueryOptions, IConnectionOptions {
@@ -94,6 +97,8 @@ namespace ADSearch {
         public bool JsonOut { get; set; }
 
         public string Attribtues { get; set; }
+
+        public bool DomainAdmins { get; set; }
 
         [Usage(ApplicationAlias = "ADSearch")]
         public static IEnumerable<Example> Examples {

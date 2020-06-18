@@ -10,6 +10,7 @@ namespace ADSearch {
     class ADWrapper {
         private string m_domain;
         private string m_ldapString;
+        private string m_domainPath;
         private bool m_json;
         private DirectoryEntry m_directoryEntry;
         private string[] m_attributes;
@@ -18,6 +19,7 @@ namespace ADSearch {
         //Default constructor attempts to detrmine domain from current machine
         public ADWrapper(bool json) {
             this.m_ldapString = GetCurrentDomainPath();
+            this.m_domainPath = this.m_ldapString.Substring(PROTOCOL_PREFIX.Length);
             this.m_json = json;
             this.m_directoryEntry = new DirectoryEntry(this.m_ldapString);
         }
@@ -26,7 +28,9 @@ namespace ADSearch {
         public ADWrapper(string domain, string username, string password, bool insecure, bool json) {
             this.m_domain = domain;
             this.m_json = json;
-            this.m_ldapString = GetDomainPathFromURI(this.m_domain);
+            this.m_domainPath = GetDCListFromURI(this.m_domain);
+            this.m_ldapString = GetDomainPathFromURI(this.m_domainPath);
+            
             if (username != null && password != null) {
                 if (insecure) {
                     this.m_directoryEntry = new DirectoryEntry(m_ldapString, username, password);
@@ -42,7 +46,9 @@ namespace ADSearch {
         public ADWrapper(string domain, string hostname, string port, string username, string password, bool insecure, bool json) {
             this.m_domain = domain;
             this.m_json = json;
-            this.m_ldapString = GetDomainPathFromHostname(this.m_domain, hostname, port);
+            this.m_domainPath = GetDCListFromURI(this.m_domain);
+            this.m_ldapString = GetDomainPathFromHostname(this.m_domainPath, hostname, port);
+
             if (username != null && password != null) {
                 if (insecure) {
                     this.m_directoryEntry = new DirectoryEntry(m_ldapString, username, password);
@@ -62,12 +68,12 @@ namespace ADSearch {
             set { this.m_attributes = value; }
         }
 
-        private string GetDomainPathFromURI(string domainURI) {
-            return String.Format("{0}{1}", PROTOCOL_PREFIX, GetDCListFromURI(domainURI));
+        private string GetDomainPathFromURI(string domainPath) {
+            return String.Format("{0}{1}", PROTOCOL_PREFIX, domainPath);
         }
 
-        private static string GetDomainPathFromHostname(string domainURI, string hostname, string port) {
-            return String.Format("{0}{1}:{2}/{3}", PROTOCOL_PREFIX, hostname, port, GetDCListFromURI(domainURI));
+        private static string GetDomainPathFromHostname(string domainPath, string hostname, string port) {
+            return String.Format("{0}{1}:{2}/{3}", PROTOCOL_PREFIX, hostname, port, domainPath);
         }
 
         private static string GetDCListFromURI(string uri) {
@@ -84,14 +90,18 @@ namespace ADSearch {
             return "LDAP://" + de.Properties["defaultNamingContext"][0].ToString();
         }
 
-        public void ListAllSpns() {
+        public void ListAllSpns(bool full = false) {
             SearchResultCollection results = this.CustomSearch("(servicePrincipalName=*)");
             if (results == null) {
                 OutputFormatting.PrintError("Unable to obtain any Service Principal Names");
                 return;
             }
 
-            ListAttributes(results, new[] { "servicePrincipalName" });
+            if (full) {
+                ListAll(results);
+            } else {
+                ListAttributes(results, new[] { "servicePrincipalName" });
+            }
         }
 
         public void ListAllGroups(bool full = false) {
@@ -127,6 +137,21 @@ namespace ADSearch {
             SearchResultCollection results = this.CustomSearch("(objectCategory=computer)");
             if (results == null) {
                 OutputFormatting.PrintError("Unable to obtain any computers");
+                return;
+            }
+
+            if (full) {
+                ListAll(results);
+            } else {
+                ListAttributes(results, this.m_attributes);
+            }
+        }
+
+        public void ListAllDomainAdmins(bool full = false) {
+            string filter = String.Format("(&(objectCategory=user)(memberOf=CN=Domain Admins,CN=Users,{0}))", this.m_domainPath);
+            SearchResultCollection results = this.CustomSearch(filter);
+            if (results == null) {
+                OutputFormatting.PrintError("Unable to get domain admins");
                 return;
             }
 

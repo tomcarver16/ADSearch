@@ -1,7 +1,17 @@
 # ADSearch
+=============
 A tool written for cobalt-strike's `execute-assembly` command that allows for more efficent querying of AD.
 
+## Key Features
+---------------
+* List all Domain Admins
+* Custom LDAP Search
+* Connect to LDAPS Servers
+* Output JSON data from AD instances
+* Retrieve custom attributes from a generic query (i.e. All computers)
+
 ## Usage
+---------------
 ```
 ADSearch 1.0.0.0
 Copyright c  2020
@@ -11,7 +21,7 @@ Query Active Directory remotely or locally:
 
   -f, --full          If set will show all attributes for the returned item.
 
-  -o, --output        (Default: outfile) File path to output the results to.
+  -o, --output        File path to output the results to.
 
   --json              (Default: false) Output results in json format.
 
@@ -28,6 +38,8 @@ Query Active Directory remotely or locally:
   --attributes        (Default: cn) Attributes to be returned from the results in csv format.
 
   -s, --search        Perform a custom search on the AD server.
+
+  --domain-admins     Attempt to retreive all Domain Admin accounts.
 
   -u, --username      Attempts to authenticate to AD with the given username.
 
@@ -47,5 +59,6 @@ Query Active Directory remotely or locally:
 ```
 
 ## Screenshots
+---------------
 ![Display all SPNs](https://github.com/tomcarver16/ADSearch/blob/master/Images/all-spns.png "All Spns")
 ![Display all Users](https://github.com/tomcarver16/ADSearch/blob/master/Images/all-users.png "All Users")
