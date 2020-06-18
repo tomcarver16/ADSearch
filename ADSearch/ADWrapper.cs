@@ -152,33 +152,35 @@ namespace ADSearch {
         }
 
         private void ListAll(SearchResultCollection results) {
-            foreach (SearchResult result in results) {
-                DirectoryEntry userEntry = result.GetDirectoryEntry();
-                if (this.m_json) {
-                    OutputFormatting.PrintJson(results);
-                } else {
+            if (this.m_json) {
+                OutputFormatting.PrintJson(results);
+            } else {
+                foreach (SearchResult result in results) {
+                    DirectoryEntry userEntry = result.GetDirectoryEntry();
                     OutputFormatting.PrintADProperties(userEntry);
                 }
             }
         }
 
         private void ListAttributes(SearchResultCollection results, string[] attrs) {
-            foreach (SearchResult result in results) {
-                DirectoryEntry userEntry = result.GetDirectoryEntry();
-                Dictionary<string, Object> customResults = new Dictionary<string, object>();
+            Dictionary<string, Object>[] attributedResults = new Dictionary<string, object>[results.Count];
+            for (int i = 0; i < results.Count; i++) {
+                attributedResults[i] = new Dictionary<string, object>();
+                DirectoryEntry userEntry = results[i].GetDirectoryEntry();
                 foreach (string key in attrs) {
-                    customResults.Add(key, userEntry.Properties[key].Value);
+                    attributedResults[i].Add(key, userEntry.Properties[key].Value);
                 }
+            }
 
-                int formatLen = OutputFormatting.GetFormatLenSpecifier(customResults.Keys.ToArray<string>());
-
-                if (this.m_json) {
-                    OutputFormatting.PrintJson(customResults);
-                } else {
-                    foreach (KeyValuePair<string, object> kvp in customResults) {
-                        OutputFormatting.PrintSuccess(String.Format("{0,-"+ formatLen +"} : {1}", kvp.Key, kvp.Value.ToString()), 1);
+            if (!this.m_json) {
+                int formatLen = OutputFormatting.GetFormatLenSpecifier(attributedResults[0].Keys.ToArray<string>());
+                foreach (Dictionary<string, Object> attributedResult in attributedResults) { 
+                    foreach (KeyValuePair<string, object> kvp in attributedResult) {
+                        OutputFormatting.PrintSuccess(String.Format("{0,-" + formatLen + "} : {1}", kvp.Key, kvp.Value.ToString()), 1);
                     }
                 }
+            } else {
+                OutputFormatting.PrintJson(attributedResults);
             }
         }
 

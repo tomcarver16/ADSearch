@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>--ip 10.0.0.25 --username administrator --password Password01 --groups</StartArguments>
+    <StartArguments>--hostname WIN-Q3VVA0VE9CH.acme.local --username administrator --password Password01 --domain acme.local --search "%28&amp;%28objectCategory=person%29%28objectClass=user%29%29" --attributes cn,distinguishedName,primaryGroupID --json</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
     <PublishUrlHistory>publish\</PublishUrlHistory>
