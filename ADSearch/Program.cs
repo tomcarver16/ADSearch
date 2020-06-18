@@ -46,14 +46,14 @@ GitHub: @tomcarver16
 
             if (options.Hostname == null && options.Domain != null) {
                 //No IP but domains set
-                AD = new ADWrapper(options.Domain, options.Username, options.Password, options.Insecure);
+                AD = new ADWrapper(options.Domain, options.Username, options.Password, options.Insecure, options.JsonOut);
             } else if (options.Hostname != null && options.Domain != null) {
                 //This requires the domain so it can be converted into a valid LDAP URI
-                AD = new ADWrapper(options.Domain, options.Hostname, options.Port, options.Username, options.Password, options.Insecure);
+                AD = new ADWrapper(options.Domain, options.Hostname, options.Port, options.Username, options.Password, options.Insecure, options.JsonOut);
             } else {
                 //When no domain is supplied it has to be done locally even if the ip is set otherwise the bind won't work
                 OutputFormatting.PrintVerbose("No domain supplied. This PC's domain will be used instead");
-                AD = new ADWrapper();
+                AD = new ADWrapper(options.JsonOut);
             }
 
             OutputFormatting.PrintVerbose(AD.LDAP_URI);

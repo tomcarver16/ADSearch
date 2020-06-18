@@ -11,7 +11,9 @@ Query Active Directory remotely or locally:
 
   -f, --full          If set will show all attributes for the returned item.
 
-  -o, --output        File path to output the results to.
+  -o, --output        (Default: outfile) File path to output the results to.
+
+  --json              (Default: false) Output results in json format.
 
   --supress-banner    When set banner will be disabled.
 

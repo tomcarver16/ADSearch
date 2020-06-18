@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,6 +25,10 @@ namespace ADSearch {
                 PrintSuccess(String.Format("     |-> {0,-30} | {1}", prop.ToString(), directoryEntry.Properties[prop.ToString()].Value));
             }
             PrintVerbose(border);
+        }
+
+        public static void PrintJson(object obj) {
+            Console.WriteLine(JsonConvert.SerializeObject(obj, Formatting.Indented));
         }
 
         public static void PrintSuccess(string msg, int indentation = 0) {

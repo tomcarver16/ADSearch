@@ -8,18 +8,21 @@ namespace ADSearch {
     class ADWrapper {
         private string m_domain;
         private string m_ldapString;
+        private bool m_json;
         private DirectoryEntry m_directoryEntry;
         private const string PROTOCOL_PREFIX = "LDAP://";
 
         //Default constructor attempts to detrmine domain from current machine
-        public ADWrapper() {
+        public ADWrapper(bool json) {
             this.m_ldapString = GetCurrentDomainPath();
+            this.m_json = json;
             this.m_directoryEntry = new DirectoryEntry(this.m_ldapString);
         }
 
         //Bind to FQDN with authentication if creds set else attempt anon bind
-        public ADWrapper(string domain, string username, string password, bool insecure = false) {
+        public ADWrapper(string domain, string username, string password, bool insecure, bool json) {
             this.m_domain = domain;
+            this.m_json = json;
             this.m_ldapString = GetDomainPathFromURI(this.m_domain);
             if (username != null && password != null) {
                 if (insecure) {
@@ -33,8 +36,9 @@ namespace ADSearch {
         }
 
         //Bind to remote server with authentication if creds set else attempt anon bind
-        public ADWrapper(string domain, string hostname, string port, string username, string password, bool insecure = false) {
+        public ADWrapper(string domain, string hostname, string port, string username, string password, bool insecure, bool json) {
             this.m_domain = domain;
+            this.m_json = json;
             this.m_ldapString = GetDomainPathFromHostname(this.m_domain, hostname, port);
             if (username != null && password != null) {
                 if (insecure) {
@@ -143,7 +147,11 @@ namespace ADSearch {
         private void ListAll(SearchResultCollection results) {
             foreach (SearchResult result in results) {
                 DirectoryEntry userEntry = result.GetDirectoryEntry();
-                OutputFormatting.PrintADProperties(userEntry);
+                if (this.m_json) {
+                    OutputFormatting.PrintJson(results);
+                } else {
+                    OutputFormatting.PrintADProperties(userEntry);
+                }
             }
         }
 
@@ -151,7 +159,13 @@ namespace ADSearch {
             foreach (SearchResult result in results) {
                 DirectoryEntry userEntry = result.GetDirectoryEntry();
                 foreach (Object obj in userEntry.Properties[attr]) {
-                    OutputFormatting.PrintSuccess(obj.ToString(), 1);
+                    if (this.m_json) {
+                        OutputFormatting.PrintJson(new Dictionary<string, Object>() {
+                             { attr, obj }
+                        });
+                    } else {
+                        OutputFormatting.PrintSuccess(obj.ToString(), 1);
+                    }
                 }
             }
         }

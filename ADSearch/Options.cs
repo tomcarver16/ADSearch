@@ -30,8 +30,11 @@ namespace ADSearch {
         [Option('f', "full", HelpText = "If set will show all attributes for the returned item.")]
         bool Full { get; set; }
 
-        [Option('o', "output", HelpText = "File path to output the results to.")]
+        [Option('o', "output", Default = "outfile", HelpText = "File path to output the results to.")]
         string Output { get; set; }
+
+        [Option("json", Default = false, HelpText = "Output results in json format.")]
+        bool JsonOut { get; set; }
 
         [Option("supress-banner", HelpText = "When set banner will be disabled.")]
         bool SupressBanner { get; set; }
@@ -84,6 +87,8 @@ namespace ADSearch {
         public bool Insecure { get; set; }
 
         public string Output { get; set; }
+
+        public bool JsonOut { get; set; }
 
         [Usage(ApplicationAlias = "ADSearch")]
         public static IEnumerable<Example> Examples {
