@@ -25,6 +25,8 @@ Query Active Directory remotely or locally:
 
   -S, --spns          Enumerate and return all SPNS from AD.
 
+  --attributes        (Default: cn) Attributes to be returned from the results in csv format.
+
   -s, --search        Perform a custom search on the AD server.
 
   -u, --username      Attempts to authenticate to AD with the given username.

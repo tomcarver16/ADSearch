@@ -53,6 +53,9 @@ namespace ADSearch {
         [Option('S', "spns", HelpText = "Enumerate and return all SPNS from AD.")]
         bool Spns { get; set; }
 
+        [Option("attributes", Default = "cn", HelpText = "Attributes to be returned from the results in csv format.")]
+        string Attribtues { get; set; }
+
         [Option('s', "search", HelpText = "Perform a custom search on the AD server.")]
         string Search { get; set; }
     }
@@ -89,6 +92,8 @@ namespace ADSearch {
         public string Output { get; set; }
 
         public bool JsonOut { get; set; }
+
+        public string Attribtues { get; set; }
 
         [Usage(ApplicationAlias = "ADSearch")]
         public static IEnumerable<Example> Examples {

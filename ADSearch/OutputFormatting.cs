@@ -27,6 +27,14 @@ namespace ADSearch {
             PrintVerbose(border);
         }
 
+        public static int GetFormatLenSpecifier(string[] keys) {
+            keys.Select((text, index) => new { Index = index, Text = text, Length = text.Length })
+                .OrderByDescending(arr => arr.Length)
+                .ToList();
+
+            return keys.Max(arr => arr.Length);
+        }
+
         public static void PrintJson(object obj) {
             Console.WriteLine(JsonConvert.SerializeObject(obj, Formatting.Indented));
         }

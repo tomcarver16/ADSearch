@@ -56,6 +56,10 @@ GitHub: @tomcarver16
                 AD = new ADWrapper(options.JsonOut);
             }
 
+            if (options.Attribtues != null && !options.Full) {
+                AD.attributesToReturn = options.Attribtues.Split(',');
+            }
+
             OutputFormatting.PrintVerbose(AD.LDAP_URI);
 
             if (options.Groups) {

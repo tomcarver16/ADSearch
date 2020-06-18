@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.DirectoryServices;
 using System.DirectoryServices.ActiveDirectory;
+using System.Linq;
 using System.Text;
+using System.Xml.Schema;
 
 namespace ADSearch {
     class ADWrapper {
@@ -10,6 +12,7 @@ namespace ADSearch {
         private string m_ldapString;
         private bool m_json;
         private DirectoryEntry m_directoryEntry;
+        private string[] m_attributes;
         private const string PROTOCOL_PREFIX = "LDAP://";
 
         //Default constructor attempts to detrmine domain from current machine
@@ -55,6 +58,10 @@ namespace ADSearch {
             get { return m_ldapString; }
         } 
 
+        public string[] attributesToReturn {
+            set { this.m_attributes = value; }
+        }
+
         private string GetDomainPathFromURI(string domainURI) {
             return String.Format("{0}{1}", PROTOCOL_PREFIX, GetDCListFromURI(domainURI));
         }
@@ -84,7 +91,7 @@ namespace ADSearch {
                 return;
             }
 
-            ListAttribute(results, "servicePrincipalName");
+            ListAttributes(results, new[] { "servicePrincipalName" });
         }
 
         public void ListAllGroups(bool full = false) {
@@ -97,7 +104,7 @@ namespace ADSearch {
             if (full) {
                 ListAll(results);
             } else {
-                ListAttribute(results, "cn");
+                ListAttributes(results, this.m_attributes);
             }
             
         }
@@ -112,7 +119,7 @@ namespace ADSearch {
             if (full) {
                 ListAll(results);
             } else {
-                ListAttribute(results, "cn");
+                ListAttributes(results, this.m_attributes);
             }
         }
 
@@ -126,7 +133,7 @@ namespace ADSearch {
             if (full) {
                 ListAll(results);
             } else {
-                ListAttribute(results, "cn");
+                ListAttributes(results, this.m_attributes);
             }
         }
 
@@ -140,7 +147,7 @@ namespace ADSearch {
             if (full) {
                 ListAll(results);
             } else {
-                ListAttribute(results, "cn");
+                ListAttributes(results, this.m_attributes);
             }
         }
 
@@ -155,16 +162,21 @@ namespace ADSearch {
             }
         }
 
-        private void ListAttribute(SearchResultCollection results, string attr) {
+        private void ListAttributes(SearchResultCollection results, string[] attrs) {
             foreach (SearchResult result in results) {
                 DirectoryEntry userEntry = result.GetDirectoryEntry();
-                foreach (Object obj in userEntry.Properties[attr]) {
-                    if (this.m_json) {
-                        OutputFormatting.PrintJson(new Dictionary<string, Object>() {
-                             { attr, obj }
-                        });
-                    } else {
-                        OutputFormatting.PrintSuccess(obj.ToString(), 1);
+                Dictionary<string, Object> customResults = new Dictionary<string, object>();
+                foreach (string key in attrs) {
+                    customResults.Add(key, userEntry.Properties[key].Value);
+                }
+
+                int formatLen = OutputFormatting.GetFormatLenSpecifier(customResults.Keys.ToArray<string>());
+
+                if (this.m_json) {
+                    OutputFormatting.PrintJson(customResults);
+                } else {
+                    foreach (KeyValuePair<string, object> kvp in customResults) {
+                        OutputFormatting.PrintSuccess(String.Format("{0,-"+ formatLen +"} : {1}", kvp.Key, kvp.Value.ToString()), 1);
                     }
                 }
             }
