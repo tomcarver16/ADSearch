@@ -43,5 +43,5 @@ Query Active Directory remotely or locally:
 ```
 
 ## Screenshots
-![alt text](https://github.com/tomcarver16/ADSearch/blob/master/Images/all-groups.png "All Groups")
-![alt text](https://github.com/tomcarver16/ADSearch/blob/master/Images/all-users.png "All Users")
+![Display all SPNs](https://github.com/tomcarver16/ADSearch/blob/master/Images/all-spns.png "All Spns")
+![Display all Users](https://github.com/tomcarver16/ADSearch/blob/master/Images/all-users.png "All Users")
