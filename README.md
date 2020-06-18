@@ -1,5 +1,5 @@
 # ADSearch
-A tool written in C# to help query AD more effectively.
+A tool written for cobalt-strike's `execute-assembly` command that allows for more efficent querying of AD.
 
 ## Usage
 ```
