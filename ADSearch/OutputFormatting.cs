@@ -15,7 +15,8 @@ namespace ADSearch {
 
         public static void PrintADProperties(DirectoryEntry directoryEntry) {
             string border = new String('-', 100);
-            PrintVerbose(String.Format("     |-> {0,-30} | {1}", "NAME", "VALUE"));
+            string cn = directoryEntry.Properties["cn"].Value.ToString();
+            PrintVerbose(String.Format("     |-> {0,-30} | {1}", String.Format("NAME ({0})", cn), "VALUE"));
             PrintVerbose(border);
             foreach (var prop in directoryEntry.Properties.PropertyNames) {
                 PrintSuccess(String.Format("     |-> {0,-30} | {1}", prop.ToString(), directoryEntry.Properties[prop.ToString()].Value));
