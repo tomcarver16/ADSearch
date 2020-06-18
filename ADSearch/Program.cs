@@ -1,6 +1,7 @@
 using System;
 using System.DirectoryServices;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using CommandLine;
 
 namespace ADSearch {
@@ -30,6 +31,7 @@ GitHub: @tomcarver16
 
         static void Entry(Options options) {
             ADWrapper AD;
+            SearchResultCollection srCollection;
             ConsoleFileOutput cf = null;
 
             if (!options.SupressBanner) {
@@ -64,33 +66,45 @@ GitHub: @tomcarver16
             OutputFormatting.PrintVerbose(AD.LDAP_URI);
 
             if (options.Groups) {
-                OutputFormatting.PrintVerbose("ALL GROUPS: ");
-                AD.ListAllGroups(AD.GetAllGroups(), options.Full);
+                srCollection = AD.GetAllGroups();
+                OutputFormatting.PrintVerbose("ALL GROUPS:");
+                OutputFormatting.PrintVerbose(String.Format("TOTAL NUMBER OF GROUPS: {0}", srCollection.Count));
+                AD.ListAllGroups(srCollection, options.Full);
             }
             
             if (options.Users) {
+                srCollection = AD.GetAllUsers();
                 OutputFormatting.PrintVerbose("ALL USERS: ");
-                AD.ListAllUsers(AD.GetAllUsers(), options.Full);
+                OutputFormatting.PrintVerbose(String.Format("TOTAL NUMBER OF USERS: {0}", srCollection.Count));
+                AD.ListAllUsers(srCollection, options.Full);
             }
 
             if (options.Computers) {
+                srCollection = AD.GetAllComputers();
                 OutputFormatting.PrintVerbose("ALL COMPUTERS: ");
-                AD.ListAllComputers(AD.GetAllComputers(), options.Full);
+                OutputFormatting.PrintVerbose(String.Format("TOTAL NUMBER OF COMPUTERS: {0}", srCollection.Count));
+                AD.ListAllComputers(srCollection, options.Full);
             }
 
             if (options.Search != null) {
+                srCollection = AD.GetCustomSearch(options.Search);
                 OutputFormatting.PrintVerbose("CUSTOM SEARCH: ");
-                AD.ListCustomSearch(AD.GetCustomSearch(options.Search), options.Full);
+                OutputFormatting.PrintVerbose(String.Format("TOTAL NUMBER OF SEARCH RESULTS: {0}", srCollection.Count));
+                AD.ListCustomSearch(srCollection, options.Full);
             }
 
             if (options.Spns) {
+                srCollection = AD.GetAllSpns();
                 OutputFormatting.PrintVerbose("ALL SPNS: ");
-                AD.ListAllSpns(AD.GetAllSpns(), options.Full);
+                OutputFormatting.PrintVerbose(String.Format("TOTAL NUMBER OF SPNS: {0}", srCollection.Count));
+                AD.ListAllSpns(srCollection, options.Full);
             }
 
             if (options.DomainAdmins) {
+                srCollection = AD.GetAllDomainAdmins();
                 OutputFormatting.PrintVerbose("ALL DOMAIN ADMINS: ");
-                AD.ListAllDomainAdmins(AD.GetAllDomainAdmins(), options.Full);
+                OutputFormatting.PrintVerbose(String.Format("TOTAL NUMBER OF DOMAIN ADMINS: {0}", srCollection.Count));
+                AD.ListAllDomainAdmins(srCollection, options.Full);
             }
 
             if (options.Output != null) {
