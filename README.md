@@ -9,31 +9,33 @@ USAGE:
 Query Active Directory remotely or locally:
   ADSearch --domain ldap.example.com --password AdminPass1 --username admin --users
 
-  -f, --full         If set will show all attributes for the returned item.
+  -f, --full          If set will show all attributes for the returned item.
 
-  -G, --groups       Enumerate and return all groups from AD.
+  --supress-banner    When set banner will be disabled.
 
-  -U, --users        Enumerate and return all users from AD.
+  -G, --groups        Enumerate and return all groups from AD.
 
-  -C, --computers    Enumerate and return all computers joined to the AD.
+  -U, --users         Enumerate and return all users from AD.
 
-  -S, --spns         Enumerate and return all SPNS from AD.
+  -C, --computers     Enumerate and return all computers joined to the AD.
 
-  -s, --search       Perform a custom search on the AD server.
+  -S, --spns          Enumerate and return all SPNS from AD.
 
-  -u, --username     Attempts to authenticate to AD with the given username.
+  -s, --search        Perform a custom search on the AD server.
 
-  -p, --password     Attempts to authenticate to AD with the given password.
+  -u, --username      Attempts to authenticate to AD with the given username.
 
-  -i, --ip           If set will attempt a remote bind to the ip address. This option requires the domain option to be set to a valid DC on the IP address
+  -p, --password      Attempts to authenticate to AD with the given password.
 
-  -p, --port         (Default: 389) If set will attempt a remote bind to the port based on the IP. Default is 389
+  -i, --ip            If set will attempt a remote bind to the ip address. This option requires the domain option to be set to a valid DC on the IP address
 
-  -d, --domain       The domain controller we are connecting to in the FQDN format. If left blank then all other connection options are ignored and the lookups are done locally.
+  -p, --port          (Default: 389) If set will attempt a remote bind to the port based on the IP.
 
-  --help             Display this help screen.
+  -d, --domain        The domain controller we are connecting to in the FQDN format. If left blank then all other connection options are ignored and the lookups are done locally.
 
-  --version          Display version information.
+  --help              Display this help screen.
+
+  --version           Display version information.
 ```
 
 ## Screenshots
