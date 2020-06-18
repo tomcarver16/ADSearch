@@ -1,9 +1,7 @@
 # ADSearch
-=============
 A tool written for cobalt-strike's `execute-assembly` command that allows for more efficent querying of AD.
 
 ## Key Features
----------------
 * List all Domain Admins
 * Custom LDAP Search
 * Connect to LDAPS Servers
@@ -11,7 +9,6 @@ A tool written for cobalt-strike's `execute-assembly` command that allows for mo
 * Retrieve custom attributes from a generic query (i.e. All computers)
 
 ## Usage
----------------
 ```
 ADSearch 1.0.0.0
 Copyright c  2020
@@ -59,11 +56,7 @@ Query Active Directory remotely or locally:
 ```
 
 ## Screenshots
-<<<<<<< HEAD
----------------
-=======
 ### Display all SPNs
->>>>>>> 660957fef7b9f56bc112125ffc045a7bbdda2351
 ![Display all SPNs](https://github.com/tomcarver16/ADSearch/blob/master/Images/all-spns.png "All Spns")
 ### Display all users
 ![Display all Users](https://github.com/tomcarver16/ADSearch/blob/master/Images/all-users.png "All Users")
