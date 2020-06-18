@@ -3,21 +3,37 @@ A tool written in C# to help query AD more effectively.
 
 ## Usage
 ```
--d, --domain       The domain to read information from. If blank we will attempt to determine the current domain the computer is joined to.
+ADSearch 1.0.0.0
+Copyright c  2020
+USAGE:
+Query Active Directory remotely or locally:
+  ADSearch --domain ldap.example.com --password AdminPass1 --username admin --users
 
--G, --groups       Enumerate and return all groups from AD
+  -f, --full         If set will show all attributes for the returned item.
 
--C, --computers    Enumerate and return all computers joined to the AD
+  -G, --groups       Enumerate and return all groups from AD.
 
--S, --spns         Enumerate and return all SPNS from AD
+  -U, --users        Enumerate and return all users from AD.
 
--s, --search       Perform a custom search on the AD server
+  -C, --computers    Enumerate and return all computers joined to the AD.
 
--f, --full         If set will show all attributes for the returned item
+  -S, --spns         Enumerate and return all SPNS from AD.
 
-Example Usage:
+  -s, --search       Perform a custom search on the AD server.
 
-ADSearch -d ldap.example.net --groups --computers --spns
+  -u, --username     Attempts to authenticate to AD with the given username.
+
+  -p, --password     Attempts to authenticate to AD with the given password.
+
+  -i, --ip           If set will attempt a remote bind to the ip address. This option requires the domain option to be set to a valid DC on the IP address
+
+  -p, --port         (Default: 389) If set will attempt a remote bind to the port based on the IP. Default is 389
+
+  -d, --domain       The domain controller we are connecting to in the FQDN format. If left blank then all other connection options are ignored and the lookups are done locally.
+
+  --help             Display this help screen.
+
+  --version          Display version information.
 ```
 
 ## Screenshots
