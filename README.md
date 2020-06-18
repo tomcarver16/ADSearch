@@ -47,5 +47,9 @@ Query Active Directory remotely or locally:
 ```
 
 ## Screenshots
+### Display all SPNs
 ![Display all SPNs](https://github.com/tomcarver16/ADSearch/blob/master/Images/all-spns.png "All Spns")
+### Display all users
 ![Display all Users](https://github.com/tomcarver16/ADSearch/blob/master/Images/all-users.png "All Users")
+### Get custom attributes back from custom search
+![Display results with custom attributes](https://github.com/tomcarver16/ADSearch/blob/master/Images/custom-attributes.png "Custom Attributes")
