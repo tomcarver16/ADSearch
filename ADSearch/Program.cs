@@ -14,8 +14,25 @@ namespace ADSearch {
                 });
         }
 
+        static void PrintBanner() {
+            Console.WriteLine(@"
+    ___    ____  _____                 __  
+   /   |  / __ \/ ___/___  ____ ______/ /_ 
+  / /| | / / / /\__ \/ _ \/ __ `/ ___/ __ \
+ / ___ |/ /_/ /___/ /  __/ /_/ / /__/ / / /
+/_/  |_/_____//____/\___/\__,_/\___/_/ /_/ 
+                                           
+Twitter: @tomcarver_
+GitHub: @tomcarver16
+            ");
+        }
+
         static void Entry(Options options) {
             ADWrapper AD;
+
+            if (!options.SupressBanner) {
+                PrintBanner();
+            }
             
             if (options.IP == null && options.Domain != null) {
                 //No IP but domains set
@@ -47,7 +64,7 @@ namespace ADSearch {
             }
 
             if (options.Search != null) {
-                OutputFormatting.PrintVerbose("ALL SPNS: ");
+                OutputFormatting.PrintVerbose("CUSTOM SEARCH: ");
                 AD.ListCustomSearch(options.Search, options.Full);
             }
 

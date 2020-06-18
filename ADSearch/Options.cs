@@ -25,6 +25,9 @@ namespace ADSearch {
     interface IOutputOptions {
         [Option('f', "full", HelpText = "If set will show all attributes for the returned item.")]
         bool Full { get; set; }
+
+        [Option("supress-banner", HelpText = "When set banner will be disabled.")]
+        bool SupressBanner { get; set; }
     }
 
     interface IQueryOptions {
@@ -68,6 +71,8 @@ namespace ADSearch {
         public bool Full { get; set; }
 
         public bool Local { get; set; }
+
+        public bool SupressBanner { get; set; }
 
         [Usage(ApplicationAlias = "ADSearch")]
         public static IEnumerable<Example> Examples {
