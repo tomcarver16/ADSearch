@@ -18,22 +18,30 @@ namespace ADSearch {
         }
 
         //Bind to FQDN with authentication if creds set else attempt anon bind
-        public ADWrapper(string domain, string username, string password) {
+        public ADWrapper(string domain, string username, string password, bool insecure = false) {
             this.m_domain = domain;
             this.m_ldapString = GetDomainPathFromURI(this.m_domain);
             if (username != null && password != null) {
-                this.m_directoryEntry = new DirectoryEntry(m_ldapString, username, password);
+                if (insecure) {
+                    this.m_directoryEntry = new DirectoryEntry(m_ldapString, username, password);
+                } else {
+                    this.m_directoryEntry = new DirectoryEntry(m_ldapString, username, password, AuthenticationTypes.SecureSocketsLayer | AuthenticationTypes.Secure);
+                }
             } else {
                 this.m_directoryEntry = new DirectoryEntry(this.m_ldapString);
             }
         }
 
         //Bind to remote server with authentication if creds set else attempt anon bind
-        public ADWrapper(string domain, string ip, string port, string username, string password) {
+        public ADWrapper(string domain, string hostname, string port, string username, string password, bool insecure = false) {
             this.m_domain = domain;
-            this.m_ldapString = GetDomainPathFromIP(this.m_domain, ip, port);
+            this.m_ldapString = GetDomainPathFromHostname(this.m_domain, hostname, port);
             if (username != null && password != null) {
-                this.m_directoryEntry = new DirectoryEntry(m_ldapString, username, password);
+                if (insecure) {
+                    this.m_directoryEntry = new DirectoryEntry(m_ldapString, username, password);
+                } else {
+                    this.m_directoryEntry = new DirectoryEntry(m_ldapString, username, password, AuthenticationTypes.SecureSocketsLayer | AuthenticationTypes.Secure);
+                }
             } else {
                 this.m_directoryEntry = new DirectoryEntry(m_ldapString);
             }
@@ -47,8 +55,8 @@ namespace ADSearch {
             return String.Format("{0}{1}", PROTOCOL_PREFIX, GetDCListFromURI(domainURI));
         }
 
-        private static string GetDomainPathFromIP(string domainURI, string ip, string port) {
-            return String.Format("{0}{1}:{2}/{3}", PROTOCOL_PREFIX, ip, port, GetDCListFromURI(domainURI));
+        private static string GetDomainPathFromHostname(string domainURI, string hostname, string port) {
+            return String.Format("{0}{1}:{2}/{3}", PROTOCOL_PREFIX, hostname, port, GetDCListFromURI(domainURI));
         }
 
         private static string GetDCListFromURI(string uri) {

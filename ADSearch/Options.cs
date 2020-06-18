@@ -10,16 +10,20 @@ namespace ADSearch {
         [Option('p', "password", Default = null, HelpText = "Attempts to authenticate to AD with the given password.")]
         string Password { get; set; }
 
-        [Option('i', "ip", Default = null, 
-            HelpText = "If set will attempt a remote bind to the ip address. This option requires the domain option to be set to a valid DC on the IP address", SetName = "bind")]
-        string IP { get; set; }
+        [Option('h', "hostname", Default = null, 
+            HelpText = "If set will attempt a remote bind to the hostname. This option requires the domain option to be set to a valid DC on the hostname. Will allow an IP address to be used as well.", 
+            SetName = "bind")]
+        string Hostname { get; set; }
 
-        [Option('p', "port", Default = "389", HelpText = "If set will attempt a remote bind to the port based on the IP.", SetName = "bind")]
+        [Option('p', "port", Default = "636", HelpText = "If set will attempt a remote bind to the port based on the IP.", SetName = "bind")]
         string Port { get; set; }
 
         [Option('d', "domain", Default = null,
             HelpText = "The domain controller we are connecting to in the FQDN format. If left blank then all other connection options are ignored and the lookups are done locally.", SetName = "bind")]
         string Domain { get; set; }
+
+        [Option("insecure", Default = false, HelpText = "If set will communicate over port 389 and not use SSL", SetName = "bind")]
+        bool Insecure { get; set; }
     }
 
     interface IOutputOptions {
@@ -54,7 +58,7 @@ namespace ADSearch {
 
         public string Password { get; set; }
 
-        public string IP { get; set; }
+        public string Hostname { get; set; }
 
         public string Port { get; set; }
 
@@ -73,6 +77,8 @@ namespace ADSearch {
         public bool Local { get; set; }
 
         public bool SupressBanner { get; set; }
+
+        public bool Insecure { get; set; }
 
         [Usage(ApplicationAlias = "ADSearch")]
         public static IEnumerable<Example> Examples {
